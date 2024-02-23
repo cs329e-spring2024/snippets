@@ -7,7 +7,7 @@ from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQue
 from datetime import timedelta
 
 project_id = 'cs329e-sp2024'
-dataset_name = 'airline_raw_auto'
+dataset_name = 'airline_raw_af'
 table_name = 'air_carriers'
 bucket_name = 'cs329e-open-access'
 file_name = 'initial_load/air_carriers.csv'
