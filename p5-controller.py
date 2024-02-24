@@ -20,7 +20,7 @@ dag = DAG(
     dag_id='p5-controller',
     default_args=default_args,
     description='controller dag',
-    schedule_interval='@once',
+    schedule_interval=None,
     max_active_runs=1,
     catchup=False,
     dagrun_timeout=timedelta(minutes=10),

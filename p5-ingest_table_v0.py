@@ -31,7 +31,7 @@ air_carriers_schema = [
 dag = DAG(
     'p5-ingest_table_v0',
     default_args=default_args,
-    schedule_interval='@once',
+    schedule_interval=None,
     max_active_runs=1,
     catchup=False,
     dagrun_timeout=timedelta(minutes=10),
