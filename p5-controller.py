@@ -26,11 +26,11 @@ dag = DAG(
     dagrun_timeout=timedelta(minutes=10),
 )
 
-start = DummyOperator(task_id="start", dag=dag)
+ingest_start = DummyOperator(task_id="ingest_start", dag=dag)
 
-# create dataset
-create_dataset = BigQueryCreateEmptyDatasetOperator(
-    task_id='create_dataset_if_needed',
+# create dataset raw
+create_dataset_raw = BigQueryCreateEmptyDatasetOperator(
+    task_id='create_dataset_raw',
     project_id=project_id,
     dataset_id=dataset_name,
     location=region,
@@ -54,8 +54,8 @@ air_carriers_schema = [
     {"name": "description", "type": "STRING", "mode": "REQUIRED"},
 ]
 
-air_carriers = TriggerDagRunOperator(
-    task_id="air_carriers",
+air_carriers_raw = TriggerDagRunOperator(
+    task_id="air_carriers_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": air_carriers_table_name, "file_name": air_carriers_file_name, \
@@ -81,8 +81,8 @@ bird_airports_schema = [
   {"name": "description", "type": "STRING", "mode": "NULLABLE"},
 ]
 
-bird_airports = TriggerDagRunOperator(
-    task_id="bird_airports",
+bird_airports_raw = TriggerDagRunOperator(
+    task_id="bird_airports_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": bird_airports_table_name, "file_name": bird_airports_file_name, \
@@ -116,8 +116,8 @@ faker_airports_schema = [
   {"name": "country", "type": "STRING", "mode": "NULLABLE"},
 ]
 
-faker_airports = TriggerDagRunOperator(
-    task_id="faker_airports",
+faker_airports_raw = TriggerDagRunOperator(
+    task_id="faker_airports_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": faker_airports_table_name, "file_name": faker_airports_file_name, \
@@ -195,8 +195,8 @@ airlines_schema = [
   {"name": "late_aircraft_delay", "type": "INTEGER", "mode": "NULLABLE"},
 ]
 
-airlines = TriggerDagRunOperator(
-    task_id="airlines",
+airlines_raw = TriggerDagRunOperator(
+    task_id="airlines_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": airlines_table_name, "file_name": airlines_file_name, \
@@ -244,8 +244,8 @@ meals_schema = [
   {"name": "youtube", "type": "STRING", "mode": "NULLABLE"},
 ]
 
-meals = TriggerDagRunOperator(
-    task_id="meals",
+meals_raw = TriggerDagRunOperator(
+    task_id="meals_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": meals_table_name, "file_name": meals_file_name, \
@@ -287,8 +287,8 @@ snacks_schema = [
   {"name": "last_modified_datetime", "type": "TIMESTAMP", "mode": "NULLABLE"},
 ]
 
-snacks = TriggerDagRunOperator(
-    task_id="snacks",
+snacks_raw = TriggerDagRunOperator(
+    task_id="snacks_raw",
     trigger_dag_id="p5-ingest-table",  
     conf={"project_id": project_id, "dataset_name": dataset_name, "bucket_name": bucket_name, \
            "table_name": snacks_table_name, "file_name": snacks_file_name, \
@@ -297,13 +297,12 @@ snacks = TriggerDagRunOperator(
     dag=dag)
 
 
-end = DummyOperator(task_id="end", dag=dag)
+ingest_end = DummyOperator(task_id="ingest_end", dag=dag)
 
-start >> create_dataset >> air_carriers >> end
-start >> create_dataset >> bird_airports >> end
-start >> create_dataset >> faker_airports >> end
-start >> create_dataset >> airlines >> end
-start >> create_dataset >> meals >> end
-start >> create_dataset >> snacks >> end
-
+ingest_start >> create_dataset_raw >> air_carriers_raw >> ingest_end
+ingest_start >> create_dataset_raw >> bird_airports_raw >> ingest_end
+ingest_start >> create_dataset_raw >> faker_airports_raw >> ingest_end
+ingest_start >> create_dataset_raw >> airlines_raw >> ingest_end
+ingest_start >> create_dataset_raw >> meals_raw >> ingest_end
+ingest_start >> create_dataset_raw >> snacks_raw >> ingest_end
 
