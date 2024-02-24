@@ -17,7 +17,7 @@ default_args = {
 }
 
 dag = DAG(
-    dag_id='p5-controller',
+    dag_id='p5-ingest-controller',
     default_args=default_args,
     description='controller dag',
     schedule_interval=None,
@@ -27,6 +27,7 @@ dag = DAG(
 )
 
 ingest_start = DummyOperator(task_id="ingest_start", dag=dag)
+ingest_end = DummyOperator(task_id="ingest_end", dag=dag)
 
 # create dataset raw
 create_dataset_raw = BigQueryCreateEmptyDatasetOperator(
@@ -296,8 +297,6 @@ snacks_raw = TriggerDagRunOperator(
            "schema_full": snacks_schema_full, "schema": snacks_schema},
     dag=dag)
 
-
-ingest_end = DummyOperator(task_id="ingest_end", dag=dag)
 
 ingest_start >> create_dataset_raw >> air_carriers_raw >> ingest_end
 ingest_start >> create_dataset_raw >> bird_airports_raw >> ingest_end
