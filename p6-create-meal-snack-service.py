@@ -47,7 +47,7 @@ def load_records(bq_client, table_id, schema, records):
         load_job = bq_client.load_table_from_json(records, table_ref, job_config=job_config)
         load_job.result()
 
-        destination_table = bq_client.get_table(target_table_id)
+        destination_table = bq_client.get_table(table_id)
         print("Loaded {} rows.".format(destination_table.num_rows))
 
         if load_job.errors:
