@@ -1,4 +1,4 @@
-"""A dag that ingests all the raw data into BQ."""
+"""A dag that creates the Meal_Service and Snack_Service tables in the staging layer."""
 import airflow
 from airflow import models
 from google.cloud import bigquery
