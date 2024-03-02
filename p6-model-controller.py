@@ -23,7 +23,7 @@ default_args = {
 dag = DAG(
     dag_id='p6-model-controller',
     default_args=default_args,
-    description='controller dag',
+    description='model controller dag',
     schedule_interval=None,
     max_active_runs=1,
     catchup=False,
@@ -44,7 +44,7 @@ create_dataset_stg = BigQueryCreateEmptyDatasetOperator(
     if_exists='ignore',
     dag=dag)
 
-# Air_Carrier
+# create Air_Carrier
 # Note: don't propagate default current_timestamp() on the load_time column, 
 # this rule should only be applied to the raw tables
 air_carrier_sql = (
