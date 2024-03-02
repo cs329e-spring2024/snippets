@@ -29,7 +29,7 @@ air_carriers_schema = [
 ]
 
 dag = DAG(
-    'p5-ingest_table_v0',
+    'p5-ingest-table-v0',
     default_args=default_args,
     schedule_interval=None,
     max_active_runs=1,
