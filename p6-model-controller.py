@@ -26,6 +26,7 @@ dag = DAG(
     description='model controller dag',
     schedule_interval=None,
     max_active_runs=1,
+    concurrency=3,
     catchup=False,
     dagrun_timeout=timedelta(minutes=10),
 )

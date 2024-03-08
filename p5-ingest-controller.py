@@ -22,6 +22,7 @@ dag = DAG(
     description='controller dag',
     schedule_interval=None,
     max_active_runs=1,
+    concurrency=3,
     catchup=False,
     dagrun_timeout=timedelta(minutes=10),
 )
@@ -213,7 +214,7 @@ meals_delimiter = "|"
 meals_skip_leading_rows = 1
 
 meals_schema_full = [
-  {"name": "meal_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "meal_id", "type": "INTEGER", "mode": "REQUIRED"},
   {"name": "meal_name", "type": "STRING", "mode": "REQUIRED"},
   {"name": "meal_image", "type": "STRING", "mode": "NULLABLE"},
   {"name": "cat_name", "type": "STRING", "mode": "NULLABLE"},
@@ -230,7 +231,7 @@ meals_schema_full = [
 ]
 
 meals_schema = [
-  {"name": "meal_id", "type": "STRING", "mode": "REQUIRED"},
+  {"name": "meal_id", "type": "INTEGER", "mode": "REQUIRED"},
   {"name": "meal_name", "type": "STRING", "mode": "REQUIRED"},
   {"name": "meal_image", "type": "STRING", "mode": "NULLABLE"},
   {"name": "cat_name", "type": "STRING", "mode": "NULLABLE"},
