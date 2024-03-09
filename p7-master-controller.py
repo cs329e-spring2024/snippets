@@ -25,7 +25,9 @@ dag = DAG(
 
 start = DummyOperator(task_id="start", dag=dag)
 end = DummyOperator(task_id="end", dag=dag)
-wait = TimeDeltaSensor(task_id="wait", delta=duration(seconds=30), dag=dag)
+wait_after_ingest = TimeDeltaSensor(task_id="wait_after_ingest", delta=duration(seconds=60), dag=dag)
+wait_after_model = TimeDeltaSensor(task_id="wait_after_model", delta=duration(seconds=180), dag=dag)
+wait_after_key = TimeDeltaSensor(task_id="wait_after_key", delta=duration(seconds=120), dag=dag)
 
 # ingest controller
 ingest_controller = TriggerDagRunOperator(
@@ -51,6 +53,6 @@ target_controller = TriggerDagRunOperator(
     trigger_dag_id="p7-target-controller",  
     dag=dag)
 
-start >> ingest_controller >> wait >> model_controller >> key_controller >> target_controller >> end
+start >> ingest_controller >> wait_after_ingest >> model_controller >> wait_after_model >> key_controller >> wait_after_key >> target_controller >> end
 
 
